@@ -1,0 +1,35 @@
+body {
+    background: url('/img/autumn.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+.modal-dialog {
+    padding-top: 160px;
+}
+
+.main {
+    margin: 0;
+}
+
+.modal-content {
+    background-color: brown;
+    opacity: 85%;
+    box-shadow: 0px 0px 5px #1a0000;
+}
+
+.form-group-all {
+    margin: 30px 0 30px;
+}
+
+button {
+    width: 50%;
+}
+
+label {
+    float: left;
+}
+
+.inputs {
+    margin-left: 30px;
+    margin-right: 30px;
+}
+

@@ -25,6 +25,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .authorizeRequests()
+                .antMatchers("/js/**", "/css/**", "/img/**")    // authorize access to static
+                .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -32,6 +34,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/showLoginPage")
                 .loginProcessingUrl("/authenticateUser")
                 .defaultSuccessUrl("/")
+                .permitAll()
+                .and()
+                .logout()
                 .permitAll();
     }
 }
