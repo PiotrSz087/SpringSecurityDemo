@@ -3,11 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
 </head>
 <body>
-Hello!
+<div class="modal-dialog col-centered">
+<p>Hello! <span sec:authentication="name"></span></p>
+<p>Your privileges: <span sec:authentication="principal.authorities"></span></p>
 <form th:action="@{/logout}" method="post">
     <button class="btn">Log out</button>
 </form>
+</div>
 </body>
 </html>
