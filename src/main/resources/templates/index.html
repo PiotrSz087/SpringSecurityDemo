@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+</head>
+<body>
+
+<div class="container mt-3">
+    <div id="bars" class="d-flex justify-content-center mb-3">
+        <div class="column-1">
+            <div class="cols">
+                <p>Hello! <span sec:authentication="name"></span></p>
+                <p>Your privileges: <span sec:authentication="principal.authorities"></span></p>
+                <form th:action="@{/logout}" method="post">
+                    <button class="btn">Log out</button>
+                </form>
+            </div>
+        </div>
+        <div class="column-2">
+            <div class="cols">
+                <div sec:authorize="hasRole('ROLE_ADMIN')">
+                    This content is only shown to administrators.
+                    <a href="/forAdmin">Admin stuff</a>
+                </div>
+                <div sec:authorize="hasRole('ROLE_USER')">
+                    This content is only shown to users.
+                    <a href="/forUsers">User stuff</a>
+                </div>
+            </div>
+        </div>
+        <div class="column-1">
+            <div class="cols">
+                Flex 3
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
