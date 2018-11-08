@@ -17,7 +17,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         User.UserBuilder users = User.withDefaultPasswordEncoder();
 
         auth.inMemoryAuthentication()
-                .withUser(users.username("Admin").password("admin").roles("ADMIN"))
+                .withUser(users.username("Admin").password("admin").roles("USER","ADMIN"))
                 .withUser(users.username("User").password("user").roles("USER"));
     }
 
@@ -27,8 +27,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/js/**", "/css/**", "/img/**")    // authorize access to static
                 .permitAll()
-                .anyRequest()
-                .authenticated()
+                .antMatchers("/", "/forUsers/**")
+                .hasRole("USER")
+                .antMatchers("/forAdmin/**")
+                .hasRole("ADMIN")
                 .and()
                 .formLogin()
                 .loginPage("/showLoginPage")
@@ -37,6 +39,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
                 .logout()
-                .permitAll();
+                .permitAll()
+                .and()
+                .exceptionHandling()
+                .accessDeniedPage("/accessDenied");
     }
 }
