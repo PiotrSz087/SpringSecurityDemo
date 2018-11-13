@@ -17,15 +17,6 @@ import java.util.*;
 @Service
 public class UserServiceImplementation implements UserService {
 
-//    private final UserDao userDao;
-//    private final RoleDao roleDAO;
-//
-//    @Autowired
-//    public UserServiceImplementation(UserDao userDao, RoleDao roleDAO) {
-//        this.userDao = userDao;
-//        this.roleDAO = roleDAO;
-//    }
-
     private final UserRepository userRepository;
     private final RolesRepository rolesRepository;
 
