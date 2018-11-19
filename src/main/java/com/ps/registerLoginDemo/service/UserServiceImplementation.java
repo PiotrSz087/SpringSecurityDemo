@@ -4,6 +4,7 @@ import com.ps.registerLoginDemo.entity.Role;
 import com.ps.registerLoginDemo.entity.User;
 import com.ps.registerLoginDemo.repository.RolesRepository;
 import com.ps.registerLoginDemo.repository.UserRepository;
+import com.ps.registerLoginDemo.validations.UserAlreadyExistException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,15 +18,6 @@ import java.util.*;
 @Service
 public class UserServiceImplementation implements UserService {
 
-//    private final UserDao userDao;
-//    private final RoleDao roleDAO;
-//
-//    @Autowired
-//    public UserServiceImplementation(UserDao userDao, RoleDao roleDAO) {
-//        this.userDao = userDao;
-//        this.roleDAO = roleDAO;
-//    }
-
     private final UserRepository userRepository;
     private final RolesRepository rolesRepository;
 
@@ -37,12 +29,23 @@ public class UserServiceImplementation implements UserService {
 
     @Override
     @Transactional
+    public User registerNewUser(User user) throws UserAlreadyExistException {
+        if (userRepository.findUserByUsername(user.getUsername()) != null) {
+            throw new UserAlreadyExistException("User already exist!");
+        }
+        User newUserToSave = new User();
+        newUserToSave.setUsername(user.getUsername());
+        newUserToSave.setPassword(user.getPassword());
+        newUserToSave.setRoles(Collections.singleton(rolesRepository.findRoleByName("ROLE_USER")));
+        return userRepository.save(newUserToSave);
+    }
+
+    @Override
+    @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findUserByUsername(username);
         if (user == null) {
-//            return new org.springframework.security.core.userdetails.User("", "",
-//                    getAuthorities(new HashSet<>(Collections.singleton(roleRepository.findRoleByName("ROLE_USER")))));
-            throw new UsernameNotFoundException("User not found");
+            throw new UsernameNotFoundException("User not found!");
         }
         return new org.springframework.security.core.userdetails.User(user.getUsername(), 
                 user.getPassword(), getAuthorities(user.getRoles()));

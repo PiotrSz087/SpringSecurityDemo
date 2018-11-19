@@ -1,6 +1,9 @@
 package com.ps.registerLoginDemo.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Set;
 
 @Entity
@@ -10,14 +13,21 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_user")
     private Long id;
+    @NotNull
+    @NotEmpty
+    @Size(min = 2, max = 14)
     @Column(name = "username")
     private String username;
+    @NotNull
+    @NotEmpty
+    @Size(min = 2, max = 14)
     @Column(name = "password")
     private String password;
     @Column(name = "roles")
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH},
             fetch = FetchType.EAGER)
-    @JoinTable(name = "user_roles", joinColumns = {@JoinColumn(name = "id_user")},
+    @JoinTable(name = "user_roles",
+            joinColumns = {@JoinColumn(name = "id_user")},
             inverseJoinColumns = {@JoinColumn(name = "id_role")})
     private Set<Role> roles;
 

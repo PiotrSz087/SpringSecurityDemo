@@ -31,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .authorizeRequests()
-                .antMatchers("/js/**", "/css/**", "/img/**")    // authorize access to static
+                .antMatchers("/js/**", "/css/**", "/img/**")
                 .permitAll()
                 .antMatchers( "/forUsers/**")
                 .hasRole("USER")
@@ -39,16 +39,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .hasRole("ADMIN")
                 .and()
                 .formLogin()
-                .loginPage("/showLoginPage")
+                .loginPage("/")
                 .loginProcessingUrl("/authenticateUser")
-                .defaultSuccessUrl("/")
-                .permitAll()
-                .and()
-                .logout()
+                .defaultSuccessUrl("/basePage")
                 .permitAll()
                 .and()
                 .exceptionHandling()
-                .accessDeniedPage("/accessDenied");
+                .accessDeniedPage("/accessDenied")
+                .and()
+                .logout()
+                .permitAll();
+
     }
 
 
