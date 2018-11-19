@@ -1,47 +1,63 @@
 package com.ps.registerLoginDemo.config;
 
+import com.ps.registerLoginDemo.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    // demo in memory authentication
+    private final UserService userService;
+
+    @Autowired
+    public SecurityConfig(UserService userService) {
+        this.userService = userService;
+    }
+
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        User.UserBuilder users = User.withDefaultPasswordEncoder();
-
-        auth.inMemoryAuthentication()
-                .withUser(users.username("Admin").password("admin").roles("USER","ADMIN"))
-                .withUser(users.username("User").password("user").roles("USER"));
+        auth.userDetailsService(userService);
     }
 
     @Override
     public void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .authorizeRequests()
-                .antMatchers("/js/**", "/css/**", "/img/**")    // authorize access to static
+                .antMatchers("/js/**", "/css/**", "/img/**")
                 .permitAll()
-                .antMatchers("/", "/forUsers/**")
+                .antMatchers( "/forUsers/**")
                 .hasRole("USER")
                 .antMatchers("/forAdmin/**")
                 .hasRole("ADMIN")
                 .and()
                 .formLogin()
-                .loginPage("/showLoginPage")
+                .loginPage("/")
                 .loginProcessingUrl("/authenticateUser")
-                .defaultSuccessUrl("/")
-                .permitAll()
-                .and()
-                .logout()
+                .defaultSuccessUrl("/basePage")
                 .permitAll()
                 .and()
                 .exceptionHandling()
-                .accessDeniedPage("/accessDenied");
+                .accessDeniedPage("/accessDenied")
+                .and()
+                .logout()
+                .permitAll();
+
     }
+
+
+    @SuppressWarnings("deprecation")
+    @Bean
+    public static NoOpPasswordEncoder passwordEncoder() {
+        return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
+    }
+
 }
+

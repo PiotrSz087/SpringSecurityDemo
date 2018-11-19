@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login Page</title>
+    <title>Registration Page</title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -14,20 +14,19 @@
 <body>
 <div class="modal-dialog text-center">
     <div class="modal-content main">
-        <img src="/img/owl.jpg" class="avatar" alt="Owl">
-        <form class="form-group-all" th:action="@{/authenticateUser}" method="post">
+        <form class="form-group-all" th:action="@{/registerUser}" th:object="${user}" method="post">
             <div class="form-group input-group inputs">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                <input id="log" type="text" name="username" class="form-control" placeholder="Enter Username">
+                <input th:fields="*{username}" id="log" type="text" name="username" class="form-control" placeholder="Enter Username">
             </div>
+            <p class="p-error" th:each="error: ${#fields.errors('username')}" th:text="${error}">Validation error</p>
             <div class="form-group input-group inputs">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                <input id="paswrd" type="password" name="password" class="form-control" placeholder="Enter Password">
+                <input th:fields="*{password}" id="paswrd" type="password" name="password" class="form-control" placeholder="Enter Password">
             </div>
-            <button class="btn btn-danger">Log in</button>
-            <div th:if="${param.error}" class="alert alert-danger center-block">Invalid username or password</div>
-            <div th:if="${param.logout}" class="alert alert-success center-block">You have been log out.</div>
-            <div th:if="${success}" th:text="${success}" class="alert alert-success center-block"></div>
+            <p class="p-error" th:each="error: ${#fields.errors('password')}" th:text="${error}">Validation error</p>
+            <button class="btn btn-danger">Register</button>
+            <div th:if="${errors}" th:text="${errors}" class="alert alert-danger center-block"></div>
         </form>
     </div>
 </div>
