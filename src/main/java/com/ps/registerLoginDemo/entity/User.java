@@ -15,6 +15,10 @@ public class User {
     private Long id;
     @NotNull
     @NotEmpty
+    @Column(name = "email")
+    private String email;
+    @NotNull
+    @NotEmpty
     @Size(min = 2, max = 14)
     @Column(name = "username")
     private String username;
@@ -34,7 +38,8 @@ public class User {
     public User() {
     }
 
-    public User(String username, String password, Set<Role> roles) {
+    public User(String email, String username, String password, Set<Role> roles) {
+        this.email = email;
         this.username = username;
         this.password = password;
         this.roles = roles;
@@ -46,6 +51,14 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getUsername() {

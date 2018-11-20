@@ -2,6 +2,7 @@ package com.ps.registerLoginDemo.controller;
 
 import com.ps.registerLoginDemo.entity.User;
 import com.ps.registerLoginDemo.service.UserService;
+import com.ps.registerLoginDemo.validations.EmailAlreadyExistException;
 import com.ps.registerLoginDemo.validations.UserAlreadyExistException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,17 +33,17 @@ public class RegisterController {
 
     @PostMapping("/registerUser")
     public String registerNewUser(@Valid @ModelAttribute("user") User newUser, BindingResult bindingResult, Model model) {
-        User userRegistered = new User();
+        String message = null;
         if (!bindingResult.hasErrors()) {
             try {
-                userRegistered = userService.registerNewUser(newUser);
-            } catch (UserAlreadyExistException e) {
-                userRegistered = null;
+                userService.registerNewUser(newUser);
+            } catch (UserAlreadyExistException | EmailAlreadyExistException e) {
+                message = e.getMessage();
             }
         }
 
-        if (userRegistered == null) {
-            model.addAttribute("errors", "User already exists.");
+        if (message != null) {
+            model.addAttribute("errors", message);
             return "registration-page";
         }
 

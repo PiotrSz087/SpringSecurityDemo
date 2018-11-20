@@ -4,6 +4,7 @@ import com.ps.registerLoginDemo.entity.Role;
 import com.ps.registerLoginDemo.entity.User;
 import com.ps.registerLoginDemo.repository.RolesRepository;
 import com.ps.registerLoginDemo.repository.UserRepository;
+import com.ps.registerLoginDemo.validations.EmailAlreadyExistException;
 import com.ps.registerLoginDemo.validations.UserAlreadyExistException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -29,11 +30,15 @@ public class UserServiceImplementation implements UserService {
 
     @Override
     @Transactional
-    public User registerNewUser(User user) throws UserAlreadyExistException {
+    public User registerNewUser(User user) throws UserAlreadyExistException, EmailAlreadyExistException {
         if (userRepository.findUserByUsername(user.getUsername()) != null) {
             throw new UserAlreadyExistException("User already exist!");
         }
+        if (userRepository.findUserByEmail(user.getEmail()) != null) {
+            throw new EmailAlreadyExistException("Email already exist.");
+        }
         User newUserToSave = new User();
+        newUserToSave.setEmail(user.getEmail());
         newUserToSave.setUsername(user.getUsername());
         newUserToSave.setPassword(user.getPassword());
         newUserToSave.setRoles(Collections.singleton(rolesRepository.findRoleByName("ROLE_USER")));
@@ -47,7 +52,7 @@ public class UserServiceImplementation implements UserService {
         if (user == null) {
             throw new UsernameNotFoundException("User not found!");
         }
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), 
+        return new org.springframework.security.core.userdetails.User(user.getUsername(),
                 user.getPassword(), getAuthorities(user.getRoles()));
     }
 

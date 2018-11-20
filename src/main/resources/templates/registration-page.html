@@ -15,11 +15,19 @@
 <div class="modal-dialog text-center">
     <div class="modal-content main">
         <form class="form-group-all" th:action="@{/registerUser}" th:object="${user}" method="post">
+            <h5>E-mail:</h5>
+            <div class="form-group input-group inputs">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+                <input th:fields="*{email}" id="ema" type="text" name="email" class="form-control" placeholder="Enter Email">
+            </div>
+            <p class="p-error" th:each="error: ${#fields.errors('email')}" th:text="${error}">Validation error</p>
+            <h5>Username:</h5>
             <div class="form-group input-group inputs">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                 <input th:fields="*{username}" id="log" type="text" name="username" class="form-control" placeholder="Enter Username">
             </div>
             <p class="p-error" th:each="error: ${#fields.errors('username')}" th:text="${error}">Validation error</p>
+            <h5>Password:</h5>
             <div class="form-group input-group inputs">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
                 <input th:fields="*{password}" id="paswrd" type="password" name="password" class="form-control" placeholder="Enter Password">
@@ -28,6 +36,7 @@
             <button class="btn btn-danger">Register</button>
             <div th:if="${errors}" th:text="${errors}" class="alert alert-danger center-block"></div>
         </form>
+        <div class="center-block"><a href="/">Go back to login page.</a></div>
     </div>
 </div>
 </body>
